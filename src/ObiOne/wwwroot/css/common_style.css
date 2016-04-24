@@ -1,0 +1,187 @@
+﻿@charset "utf-8"; /*文字コード指定*/
+
+/* ----- css reset(各ブラウザで指定されているスタイルを初期化)と全体設定 ----- */
+
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, form, input, textarea, p, th, td, img {
+	margin: 0; /*ボックス外側の余白(値1つは上下左右をまとめて指定)*/
+	padding: 0; /*ボックス内側の余白(値1つは上下左右をまとめて指定)*/
+	border: 0; /*境界線指定*/
+}
+
+body {
+	background-color: #D9CFC5; /*背景色指定*/
+	line-height: 2;	/*行の高さ指定(数値のみの場合はfont-sizeの倍数)*/
+	font-family: "メイリオ", Meiryo, "ＭＳ Ｐゴシック", Osaka, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro"; /*フォントの種類指定(左から優先順位)*/
+	font-size: 75%; /* フォントサイズ指定(%はブラウザに設定した標準文字サイズ(通常16px)に対する値)*/
+	color: #333; /*文字色指定*/
+}
+
+ol, ul {
+	list-style: none; /*リストマーカーの種類指定(noneはなし)*/
+}
+
+a { /*リンクの文字設定(マウスをのせる前)*/
+	color: #0000FF; /*文字色指定*/
+	text-decoration: none; /*テキストの装飾指定(下線、上線など)(noneはなし)*/
+}
+
+a:hover { /*リンクの文字設定(マウスをのせた時)*/
+	color: #C74B15; /*文字色指定*/
+	text-decoration: underline; /*テキストの装飾指定(下線、上線など)(underlineは下線を引く)*/
+}
+
+.color1 {
+	color: #FF0033; /*文字色指定*/
+}
+
+
+/* ----- レイアウト ----- */
+
+#container { /*container(入れ物、容器)の中に各要素(ボックス)を配置*/
+	width: 1000px; /*幅指定*/
+	margin: auto; /*ボックス外側の余白(autoはボックス幅や隣接する他ボックス幅による自動余白割り当て)*/
+}
+
+#content {
+	width: 80%; /*幅指定*/
+	float: right; /*要素を左か右に寄せて配置(rightは右に寄せる)*/
+	margin-top: 100px; /*ボックス外側上の余白*/
+}
+
+#leftside {
+	width: 10%; /*幅指定*/
+	float: left; /*要素を左か右に寄せて配置(leftは左に寄せる)*/
+	margin-top: 50px; /*ボックス外側上の余白*/
+	margin-left: 20px; /*ボックス外側左の余白*/
+}
+
+/* ----- フッター(ページの一番下の部分) ----- */
+
+#footer {
+	clear: both; /*floatの回り込みを解除*/
+	height: 30px; /*領域の高さを指定*/
+	width: auto; /*幅指定(autoは初期値に戻す)*/
+}
+
+#footer p {
+	text-align: right; /*行の水平方向の揃え方(rightは右揃え)*/
+	font-size: 0.75em; /*フォントサイズ指定(emはフォントの高さを１とした相対指定)*/
+	margin-right: 20px; /*ボックス外側右の余白*/
+}
+
+
+/* ----- コンテンツ ----- */
+
+.post {
+	width: 800px; /*幅指定*/
+	margin: 60px 30px; /*ボックス外側の余白(値2つは左から上下,左右の値)*/
+}
+
+.post h2 {
+	font-size: 3em; /*フォントサイズ指定(emはフォントの高さを１とした相対指定)*/
+	margin-bottom: 30px; /*ボックス外側下の余白*/
+	border-bottom: solid 1px #aaa; /*境界線の一括指定(solidは1本線,線の太さ,線の色)*/
+}
+
+.post ul {
+	margin-left: 80px; /*ボックス外側左の余白*/
+}
+
+.post li {
+	padding-left: 15px; /*ボックス内側左の余白*/
+	line-height: 30px; /*行の高さ指定*/
+}
+iframe {
+	margin-top: 60px; /*ボックス外側上の余白*/
+}
+
+/* ----- テーブル設定1 ----- */
+
+.ta1 {
+	width: 700px; /*幅指定*/
+	border-collapse: collapse; /*境界線の表示指定(collapseは重ねて表示)*/
+	margin: 0 auto; /*ボックス外側の余白(値2つは左から上下,左右の値(左右autoで中央配置))*/
+}
+
+.ta1 th, td {
+	border: none; /*境界線の一括指定(noneはなし)*/
+	font-weight: normal; /*フォントの太さ指定(normalは標準)*/
+	text-align: left; /*行の水平方向の揃え方(leftは左寄せ)*/
+}
+
+.ta1 h2 {
+	font-size: 2em; /*フォントサイズ指定(emはフォントの高さを１とした相対指定)*/
+	font-weight: normal; /*フォントの太さ指定(normalは標準)*/
+	border: none; /*境界線の一括指定(noneはなし)*/
+	padding: 0 0 10px 30px; /*ボックス内側の余白(値4つは左から上,右,下,左の値)*/
+}
+
+.ta1 img {
+	border: solid 1px #ddd; /*境界線の一括指定(solidは1本線,線の太さ,線の色)*/
+	margin-bottom: 50px; /*ボックス外側下の余白*/
+}
+.ta1 p {
+	padding-left: 30px; /*ボックス内側左の余白*/
+}
+.price {
+	padding: 30px 0 0 30px; /*ボックス内側の余白(値4つは左から上,右,下,左の値)*/
+	font-size: 1.3em; /*フォントサイズ指定(emはフォントの高さを１とした相対指定)*/
+}
+
+/* ----- テーブル設定2 ----- */
+
+.ta2 {
+	width: 600px; /*幅指定*/
+	border-collapse: collapse; /*境界線の表示指定(collapseは重ねて表示)*/
+	margin: 0 auto; /*ボックス外側の余白(値2つは左から上下,左右の値(左右autoで中央配置))*/
+}
+
+.ta2 th, td {
+	border: none; /*境界線の一括指定(noneはなし)*/
+	font-weight: normal; /*フォントの太さ指定(normalは標準)*/
+	text-align: left; /*行の水平方向の揃え方(leftは左寄せ)*/
+}
+.ta2 p {
+	font-size: 1.5em; /*フォントサイズ指定(emはフォントの高さを１とした相対指定)*/
+}
+
+/* ----- ページ左の内容 ----- */
+
+#leftside h1 {
+	margin-bottom: 50px; /*ボックス外側下の余白*/
+	font-size: 1em; /*フォントサイズ指定(emはフォントの高さを１とした相対指定)*/
+	line-height: 30px; /*行の高さ指定*/
+}
+/* ----- ナビゲーションメニュー ----- */
+
+.topnav li {
+	line-height: 30px; /*行の高さ指定*/
+}
+
+.topnav li a {
+	color: #333; /*文字色指定*/
+}
+.topnav li a:hover {
+	color: #aaa; /*文字色指定*/
+	text-decoration: none; /*テキストの装飾指定(下線、上線など)(noneはなし)*/
+}
+.nav li {
+	line-height: 30px; /*行の高さ指定*/
+}
+
+.nav li a {
+	color: #aaa; /*文字色指定*/
+}
+.nav li a:hover, .nav a.active {
+	color: #333; /*文字色指定*/
+	text-decoration: none; /*テキストの装飾指定(下線、上線など)(noneはなし)*/
+}
+
+/* ----- いか追加 ----- */
+.paging{
+    cursor:pointer;
+    color:blue;
+}
+.paging:hover{
+    color:red;
+}

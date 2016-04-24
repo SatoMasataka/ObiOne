@@ -1,0 +1,31 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:51562/",
+      "sslPort": 0
+    }
+  },
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "main.html",
+      "environmentVariables": {
+        "Hosting:Environment": "Development"
+      },
+      "sdkVersion": "dnx-clr-win-x86.1.0.0-beta5"
+    },
+    "web": {
+      "commandName": "web",
+      "workingDirectory": "C:\\Users\\Masataka\\Desktop\\新しいフォルダー",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:5000/mainpage.html",
+      "environmentVariables": {
+        "Hosting:Environment": "Development"
+      }
+    },
+    "newProfile1": {}
+  }
+}

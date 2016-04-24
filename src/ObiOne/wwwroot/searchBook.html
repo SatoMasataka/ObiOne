@@ -1,0 +1,21 @@
+﻿<div id="content">
+    <div class="post">
+        タイトル：<input type="text" ng-model="Title">
+        著者名：<input type="text" ng-model="Author">
+        <input type="button" ng-click="SearchBook()" value="検索">
+
+        <table>
+            <tr ng-repeat="row in BookInfo">
+                <td ng-repeat="info in row" ng-click="GoToEditObi(info)">
+                    <h5>{{info.title}} </h5>
+                    <h5>{{info.author}}</h5>
+                    <img src="{{info.mediumImageUrl}}" />
+                </td>
+            </tr>
+        </table>
+        <!--ページャー-->
+        <span ng-repeat="p in Paging">
+            <span ng-click="ChangePage(p.No)" class="paging"> {{p.No}} </span>
+        </span>
+    </div>
+</div>

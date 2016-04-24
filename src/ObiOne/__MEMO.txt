@@ -1,0 +1,38 @@
+﻿アプリID/デベロッパーID
+(applicationId / developerId)
+
+1066764158692643350
+
+application_secret
+
+56875500952e00aa94f29e594e6c732facbc3f7b
+
+アフィリエイトID
+(affiliateId)
+
+14d99458.7ef47fc5.14d99459.b7b2a47f
+
+========================================
+【全般】
+C#でjson読み込み
+http://www2.hatenadiary.jp/entry/2013/12/14/030112
+
+画面間のデータ受け渡し
+http://dev.classmethod.jp/client-side/javascript/ngscreentransitionsample/
+
+楽天api
+https://webservice.rakuten.co.jp/api/booksbooksearch/
+
+angular 認証
+http://liginc.co.jp/web/js/other-js/160349
+http://komaken.me/blog/2013/08/22/angularjsscope%E3%82%92%E8%B6%85%E3%81%88%E3%81%A6%E3%83%87%E3%83%BC%E3%82%BFmodel%E3%82%92%E3%82%84%E3%82%8A%E3%81%A8%E3%82%8A%E3%81%99%E3%82%8B%E5%A4%8F%E4%BC%91%E3%81%BF%E4%BC%81%E7%94%BB5/
+
+js画像編集
+http://plus.appgiga.jp/masatolan/2015/07/29/56567/
+
+========================================
+【ライブらり】
+colorpicker js
+http://www.html5.jp/library/cpick.html
+(ただしそのままではAngularに適応できないので)
+http://qiita.com/ryounagaoka/items/a48d3a4c4faf78a99ae5

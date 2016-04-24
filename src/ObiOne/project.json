@@ -1,0 +1,44 @@
+{
+  "version": "1.0.0-*",
+  "compilationOptions": {
+    "emitEntryPoint": true
+  },
+  "webroot": "wwwroot",
+  "dependencies": {
+    "Microsoft.AspNet.Mvc": "6.0.0-beta5",
+    "EntityFramework.SqlServer": "7.0.0-beta5",
+    "EntityFramework.Commands": "7.0.0-beta5",
+    "Microsoft.AspNet.StaticFiles": "1.0.0-beta5",
+    "Microsoft.AspNet.Server.IIS": "1.0.0-beta5",
+    "Microsoft.AspNet.Server.WebListener": "1.0.0-beta5",
+    "Microsoft.Framework.Configuration.Json": "1.0.0-beta5"
+  },
+
+  "commands": {
+    "web": "Microsoft.AspNet.Server.Kestrel"
+  },
+
+  "frameworks": {
+    "dnx451": {
+      "frameworkAssemblies": {
+        "System.Drawing": "4.0.0.0",
+        "System.Web": "4.0.0.0"
+      },
+      "dependencies": {
+        "IronPython": "1.0.0-*",
+        "IronPython.Modules": "1.0.0-*",
+        "Microsoft.Dynamic": "1.0.0-*",
+        "Microsoft.Scripting": "1.0.0-*"
+      }
+    }
+  },
+
+  "exclude": [
+    "wwwroot",
+    "node_modules"
+  ],
+  "publishExclude": [
+    "**.user",
+    "**.vspscc"
+  ]
+}

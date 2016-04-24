@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 14 for Web
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6478E19D-BBAE-4D3B-9C58-9F1C2A3D94AB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DA1CE17B-44D0-4B0B-B9DC-8EEFB9CFFE47}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ObiOne", "src\ObiOne\ObiOne.xproj", "{9346F6BC-1A1D-4E10-9F8F-AE4D6BF6C649}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9346F6BC-1A1D-4E10-9F8F-AE4D6BF6C649}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9346F6BC-1A1D-4E10-9F8F-AE4D6BF6C649}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9346F6BC-1A1D-4E10-9F8F-AE4D6BF6C649}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9346F6BC-1A1D-4E10-9F8F-AE4D6BF6C649}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9346F6BC-1A1D-4E10-9F8F-AE4D6BF6C649} = {6478E19D-BBAE-4D3B-9C58-9F1C2A3D94AB}
+	EndGlobalSection
+EndGlobal

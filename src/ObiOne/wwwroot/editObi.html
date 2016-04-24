@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+
+<div ng-init="initDisp()">
+
+     <div style="width:60%;float:left"  >
+        <canvas id="main-canvas" width=800 height=800></canvas>
+    </div>
+
+    <div style="width:10%;float:left">
+        <div>帯の高さ</div>
+        <div>
+            <input type="button" ng-click="changeObiHeightPercentage(-5)" value="<<" />
+            <input type="button" ng-click="changeObiHeightPercentage(-1)" value="<"/>
+            {{ObiInfo.ObiHeightPercentage}} %
+            <input type="button" ng-click="changeObiHeightPercentage(1)" value=">"/>
+            <input type="button" ng-click="changeObiHeightPercentage(5)" value=">>" />
+        </div>
+        <div>帯の色</div>
+        <div>
+           
+            <input type="text" name="c2" size="12" id="t2" ng-change="updateObi()" class="html5jp-cpick [coloring:true]"  
+                   ng-model="ObiInfo.ObiColor" />
+             <!--
+            <input type="text" size="12" id="t3"ng-change="updateObi()"   ng-model="ObiInfo.ObiColor" />
+            <button class="html5jp-cpick [target:t3]">click</button>-->
+        </div>
+        
+    </div>
+</div>
+
+  
