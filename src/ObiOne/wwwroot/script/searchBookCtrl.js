@@ -27,6 +27,7 @@ myApp.controller('searchBookCtrl', ['$scope', '$resource', '$location', 'editObi
         );
     }
 
+    /*ページング変更*/
     $scope.ChangePage = function (pg) {
         apiw.get(
             //クエリストリング
@@ -51,9 +52,10 @@ myApp.controller('searchBookCtrl', ['$scope', '$resource', '$location', 'editObi
 
 
     /*ここからプライベートメソッド*/
+    //検索結果を行単位の塊でラッピング
     var wrappingSearchResult = function (items) {
         var bookInfo_wrap = [];
-        var colNum = 3;//一行あたりの表示件数(固定)
+        var colNum = 4;//一行あたりの表示件数(固定)
         var count = 0;
         var work = [];
         for (var i = 0; i <items.length; i++) {

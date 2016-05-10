@@ -1,0 +1,11 @@
+﻿<div ng-init="init()">
+    <div ng-show="mode=='0'">
+        新規登録
+    </div>
+    <div ng-show="mode=='1'">
+        設定変更
+    </div>
+    <p>名前</p>
+    <input type="text" ng-model="loginInfo.Name"/>
+    <input type="button" value="登録" ng-click="btnRegistClick()"/>
+</div>

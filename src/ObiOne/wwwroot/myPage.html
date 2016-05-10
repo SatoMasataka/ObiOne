@@ -1,0 +1,27 @@
+﻿<div ng-init="init()"> 
+    <div>
+        <p>{{loginInfo.Name}}　さんのマイページ</p>
+    </div>
+    <a ng-click="toSearchBook()">帯を作る</a>
+    
+    <div>作成した帯</div>
+    <div ng-repeat="o in ObiList" class="col-xs-2" ng-click="DispWiondowOpen(o)" style="margin:10px;cursor:pointer">
+        <img src="{{o.ImgPath}}" style="width:100%"/>
+    </div>
+</div>
+
+<!--表示ダイアログ-->
+<script type="text/ng-template" id="W_Disp">
+    <div class="modal-body">
+        <button type="button" class="close" ng-click="$dismiss()">&times;</button>
+        <div>{{Detail.BookTitle}} </div>
+        <div>{{Detail.Author}}</div>
+        <div>{{Detail.Publisher}}</div>
+        <div style="width:100%;text-align:center;vertical-align:middle">
+            <img ng-src="{{Detail.ImgPath}}" style="width:90%;" />
+        </div>
+        <div style="height: 60px;">
+            <input type="button" ng-click="DeleteObi(Detail.ObiId)" style="float:right;margin-top:5px" value="削除" class="decolatedBtn">
+        </div>
+    </div>
+</script>

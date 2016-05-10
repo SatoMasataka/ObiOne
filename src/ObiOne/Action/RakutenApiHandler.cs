@@ -49,7 +49,9 @@ namespace ObiOne.Action
             nameValue.Add("applicationId", "1066764158692643350");
             nameValue.Add("formatVersion", "2");
             nameValue.Add("size", "0");
-            if(!string.IsNullOrEmpty(Title))
+            nameValue.Add("outOfStockFlag", "1");
+            
+            if (!string.IsNullOrEmpty(Title))
                 nameValue.Add("title", HttpUtility.UrlEncode(Title, Encoding.UTF8));
             if (!string.IsNullOrEmpty(Author))
                 nameValue.Add("author", HttpUtility.UrlEncode(Author, Encoding.UTF8));
@@ -67,35 +69,21 @@ namespace ObiOne.Action
         }
 
         /// <summary>
-        /// 表紙画像を引き伸ばし
+        /// 表紙画像をサーバーに保存
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public static string MakePictureHighQuality(string url)
+        public static string SavePicture(string url)
         {
-            string tenpFolder=Startup.Configuration["AppPath:PictTempPath"];
-            string filePath= Path.Combine(tenpFolder, Guid.NewGuid() +
-                "_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".jpg");
+            string filePath= Path.Combine(Setting.PICT_TEMP_PATH, Util.NewPictName());
 
             WebClient wc = new WebClient();
             Stream stream = wc.OpenRead(url);
             Bitmap src = new Bitmap(stream);
             stream.Close();
 
-            int scalePoint = 800 / src.Height;
-            int w = src.Width * scalePoint;
-            int h = 800;
-
-            Bitmap dest = new Bitmap(w, h);
-            Graphics g = Graphics.FromImage(dest);
-
-            g.InterpolationMode = InterpolationMode.Bicubic;
-            g.DrawImage(src, 0, 0, w, h);
-            dest.Save(filePath, ImageFormat.Jpeg);
-
-            g.Dispose();
-            dest.Dispose();
-
+            src.Save(filePath, ImageFormat.Jpeg);
+          
             return Util.GenerateServerPath(filePath);
         }
     }

@@ -18,5 +18,14 @@ namespace ObiOne.Action
             int rootIndex = path.IndexOf("wwwroot");
             return "http://" + path.Substring(rootIndex).Replace("wwwroot", Startup.Configuration["RootAddress"]);
         }
+
+        /// <summary>
+        /// 重複しない画像名を生成
+        /// </summary>
+        /// <returns></returns>
+        public static string NewPictName(string head="")
+        {
+            return head + DateTime.Now.ToString("yyyyMMddHHmmssfff") + "_" + Guid.NewGuid()   + ".jpg";
+        }
     }
 }

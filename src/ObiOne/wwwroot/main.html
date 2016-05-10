@@ -2,6 +2,8 @@
 <html ng-app="myApp" >
 <head>
     <meta charset="utf-8" />
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
     <link href='https://fonts.googleapis.com/css?family=Shadows+Into+Light' rel='stylesheet' type='text/css'>
     <script src="lib/easeljs/lib/easeljs-0.8.2.min.js"></script>
     <script type="text/javascript" src="http://code.createjs.com/preloadjs-0.1.0.min.js"></script>
@@ -11,20 +13,54 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-resource.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-route.min.js"></script>
 
-
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
 
-    <link href='css/common_style.css' rel='stylesheet' type='text/css'>
-    <script type="text/javascript" src="./script/app.js"></script>
+    <script type="text/javascript" src="./script/app.js" ></script>
     <script type="text/javascript" src="./script/searchBookCtrl.js"></script>
     <script type="text/javascript" src="./script/editObiCtrl.js"></script>
+    <script type="text/javascript" src="./script/topCtrl.js"></script>
+    <script type="text/javascript" src="./script/userSettingCtrl.js"></script>
+    <script type="text/javascript" src="./script/myPageCtrl.js" ></script>
 
+    <script type="text/javascript" src="script/google-plus-signin.js"></script>
+    <script type="text/javascript" src="script/cpick.js"></script>
+    <link rel="stylesheet" href="css/dm.css"/>
 
-    <script type="text/javascript" src="lib/cpick.js"></script>
+    <base href="main.html"/>
     <title>帯ワン・ケノービ</title>
 </head>
-<body >
-    <ng-view></ng-view>
+<body  ng-controller="menuCtrl">
+   
+    <div class="col-xs-1">
+        <img src="img/logo2.png" style="width:100%"/>
+        <div id="menu" ng-show="loginInfo" >
+            <ul>
+                <li><a ng-click="ToMyPage()">TOP</a></li>
+                <li><a ng-click="ToSearchBook()">帯を作る</a></li>
+                <li><a >仮想書店</a></li>
+                <li><a ng-click="LogOff()">ログオフ</a></li>
+            </ul>
+           
+        </div>
+       
+    </div>
+    <div class="wrapper  col-xs-10">
+        <ng-view></ng-view>
+        <div class="col-xs-4" style="padding: 10px; border: 2px ridge currentColor; border-image: none; margin-top: 100px;" ng-show="IsTop()">
+            <h2>Googleアカウントでログインする</h2>
+            <p>ログインされていません。Googleのアカウント使ってログインできます。</p>
+            <google-plus-signin clientid="406839533178-iih7l91nsovd6dnkqr757fmv5lhudltf.apps.googleusercontent.com" language="ja"></google-plus-signin>
+        </div>
+    </div>
+
+    <footer class="copylight col-xs-12" >
+        <div class="footerborder"></div>
+        <div>
+            © 2008-2016  powered by 
+            <a href="../../toppage/index.html"> SAT Works</a>
+        </div>
+       
+    </footer>
 </body>
 </html>

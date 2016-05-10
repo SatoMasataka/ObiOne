@@ -1,30 +1,143 @@
-﻿<!DOCTYPE html>
-
-<div ng-init="initDisp()">
-
+﻿<!--確認用ダイアログ-->
+<script type="text/ng-template" id="W_Regist">
+    <div class="modal-body">
+        <button type="button" class="close" ng-click="$dismiss()">&times;</button>
+        <div>帯画像生成</div>
+        <img ng-src="{{t}}" style="width:80%"/> 
+        <div>{{bookData.title}} {{bookData.author}}</div>
+        <div ng-show="loginInfo">
+            <input type="button" value="この帯を登録する" ng-click="btnRegistObiClick()">
+        </div>
+        <div ng-show="!loginInfo">
+            ログインしていないため、画像は登録できません。<br>
+            右クリックで画像をローカルに保存してください。
+        </div>
+    </div>
+</script>
+<!--画像選択-->
+<script type="text/ng-template" id="W_SelectImg">
+    <div class="modal-body">
+        <button type="button" class="close" ng-click="$dismiss()">&times;</button>
+        <span ng-repeat="f in StmpFolders" ng-click="showImgFilesInFolder(f)">
+            {{f.Name}}
+        </span>
+        <div ng-repeat="i in range(CurrentFolder.Num)">
+            <img  src="img/stmp/{{CurrentFolder.Name}}/{{i}}.png"/>
+        </div>
+    </div>
+</script>
+<div >
      <div style="width:60%;float:left"  >
-        <canvas id="main-canvas" width=800 height=800></canvas>
+         <div>{{bookData.title}} {{bookData.author}}</div>
+         <div style="background-color:black;width:800px;height:800px">
+            <canvas id="main-canvas" width=800 height=800 ng-click="canvasClick(changePosIdx)"></canvas>
+         </div>
+        <input type="button" value="帯画像を生成" ng-click="btnCommitClick()">
+       
     </div>
 
-    <div style="width:10%;float:left">
-        <div>帯の高さ</div>
-        <div>
-            <input type="button" ng-click="changeObiHeightPercentage(-5)" value="<<" />
-            <input type="button" ng-click="changeObiHeightPercentage(-1)" value="<"/>
-            {{ObiInfo.ObiHeightPercentage}} %
-            <input type="button" ng-click="changeObiHeightPercentage(1)" value=">"/>
-            <input type="button" ng-click="changeObiHeightPercentage(5)" value=">>" />
-        </div>
-        <div>帯の色</div>
-        <div>
-           
-            <input type="text" name="c2" size="12" id="t2" ng-change="updateObi()" class="html5jp-cpick [coloring:true]"  
-                   ng-model="ObiInfo.ObiColor" />
-             <!--
-            <input type="text" size="12" id="t3"ng-change="updateObi()"   ng-model="ObiInfo.ObiColor" />
-            <button class="html5jp-cpick [target:t3]">click</button>-->
-        </div>
-        
+    <div style="width:40%;float:left"  ng-init="initDisp()" >
+            <div>帯の高さ</div>
+            <div>
+                <input type="range" ng-model="ObiInfo.ObiHeightPercentage" max="100" min="0"  ng-change="updateObi()"/>
+            </div>
+            <div>帯の色</div>
+            <div>
+                <input type="text" name="c2" size="12" id="t2" ng-change="updateObi()" class="html5jp-cpick"  ng-model="ObiInfo.ObiColor" />
+            </div>
+            <div ng-repeat="con in ObiInfo.Contents" repeat-finished style="border:solid" ng-style="{'background-color': (changePosIdx == $index) ? 'yellow' : 'none'}">
+                <div>
+                    パーツ{{$index+1}}
+                    <input type="radio" value="0" ng-model="con.PartsType"  ng-change="updateObi()"/>テキスト
+                    <input type="radio" value="1" ng-model="con.PartsType"  ng-change="updateObi()"/>図形
+                    <input type="radio" value="2" ng-model="con.PartsType"  ng-change="updateObi()"/>画像
+                    <br>
+                    <div>
+                        <input type="button" ng-click="btnChangePosClick($index)" value="座標位置変更">
+                        座標 :({{con.Position.X}},{{con.Position.Y}})
+                    </div>
+                    角度:<input type="text" ng-model="con.Rotation" ng-change="updateObi()" />
+                </div>
+
+                <div ng-show="con.PartsType==0">
+                    <div>
+                        テキスト:<textarea ng-model="con.Tp0.Text" ng-change="updateObi()" ng-trim="false"></textarea>
+                    </div>
+                    <div>
+                        色:<input type="text" name="c2" size="12" id="t2" ng-change="updateObi()" class="html5jp-cpick" ng-model="con.Tp0.Color" />
+                        サイズ:<input type="text" ng-model="con.Tp0.Size" ng-change="updateObi()" />
+                    </div>
+                    <div>
+                        フォント：
+                        <select ng-model="con.Tp0.Font" ng-change="updateObi()">
+                            <option value="ＭＳ ゴシック">ＭＳ ゴシック</option>
+                            <option value="ＭＳ 明朝">ＭＳ 明朝 </option>
+                            <option value="ＭＳ Ｐゴシック">ＭＳ Ｐゴシック </option>
+                            <option value="ＭＳ Ｐ明朝">ＭＳ Ｐ明朝 </option>
+                            <option value="cursive">cursive </option>
+                            <option value="fantasy">fantasy </option>
+                            <option value="monospace">monospace </option>
+                            <option value="sans-serif">sans-serif  </option>
+                            <option value="serif">serif </option>
+                            <option value="Courier">Courier </option>
+                        </select>
+                        <!--<input type="checkbox" ng-model="con.Tp0.Bold" ng-change="updateObi()">太字-->
+                        <!--<input type="checkbox" ng-model="con.Tp0.Italic" ng-change="updateObi()">斜体-->
+                    </div>
+                    <div>
+                        囲い：
+                        <select ng-model="con.Tp0.Kakoi.Type" ng-change="updateObi()">
+                            <option value="0">なし </option>
+                            <option value="1">丸 </option>
+                            <option value="2">四角形 </option>
+                            <option value="3">角丸四角形 </option>
+                        
+                        </select>
+                        塗潰し色：<input type="text" name="c2" size="12" id="t2" ng-change="updateObi()" class="html5jp-cpick"
+                               ng-model="con.Tp0.Kakoi.Color" />
+                        <div>
+                            線色：<input type="text" name="c2" size="12" id="t2" ng-change="updateObi()" class="html5jp-cpick"
+                                      ng-model="con.Tp0.Kakoi.LineColor" />
+                            線の太さ:<input type="text" ng-model="con.Tp0.LineSize" ng-change="updateObi()" />
+                        </div>
+                       
+                    </div>
+                </div>
+                <div ng-show="con.PartsType==1">
+                    図形タイプ：
+                    <select ng-model="con.Tp1.Type" ng-change="updateObi()">
+                        <option value="0">なし </option>
+                        <option value="1">丸 </option>
+                        <option value="2">四角形 </option>
+                        <option value="3">角丸四角形 </option>
+                        <option value="4">星 </option>
+                        <option value="5">多角形 </option>
+                        <option value="6">線 </option>
+                    </select>
+                    <div ng-show="con.Tp1.Type==1 ||con.Tp1.Type==4||con.Tp1.Type==5">
+                        サイズ:<input type="text" ng-model="con.Tp1.SizeX" ng-change="updateObi()" />
+                    </div>
+                    <div ng-show="con.Tp1.Type==5 ||con.Tp1.Type==4">
+                        角の数:<input type="number" ng-model="con.Tp1.KadoNum" ng-change="updateObi()" />
+                    </div>
+                    <div ng-show="con.Tp1.Type==2 ||con.Tp1.Type==3">
+                        横サイズ:<input type="text" ng-model="con.Tp1.SizeX" ng-change="updateObi()" />
+                        縦サイズ:<input type="text" ng-model="con.Tp1.SizeY" ng-change="updateObi()" />
+                    </div>
+                    <div>
+                        塗潰し色：<input type="text" name="c2" size="12" id="t2" ng-change="updateObi()" class="html5jp-cpick"
+                                    ng-model="con.Tp1.Color" />
+                    </div>
+                    <div>
+                        線色：<input type="text" name="c2" size="12" id="t2" ng-change="updateObi()" class="html5jp-cpick"
+                               ng-model="con.Tp1.LineColor" />
+                        線の太さ:<input type="text" ng-model="con.Tp1.LineSize" ng-change="updateObi()" />
+                    </div>
+                </div>
+                <div ng-show="con.PartsType==2">
+                    <input type="button" value="画像選択" ng-click="btnSelectImgClick()"/>
+                </div>
+            </div>
     </div>
 </div>
 

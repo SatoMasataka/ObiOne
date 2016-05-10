@@ -11,7 +11,8 @@
     "Microsoft.AspNet.StaticFiles": "1.0.0-beta5",
     "Microsoft.AspNet.Server.IIS": "1.0.0-beta5",
     "Microsoft.AspNet.Server.WebListener": "1.0.0-beta5",
-    "Microsoft.Framework.Configuration.Json": "1.0.0-beta5"
+    "Microsoft.Framework.Configuration.Json": "1.0.0-beta5",
+    "Strathweb.CacheOutput.WebApi2": "0.9.0"
   },
 
   "commands": {
@@ -28,7 +29,8 @@
         "IronPython": "1.0.0-*",
         "IronPython.Modules": "1.0.0-*",
         "Microsoft.Dynamic": "1.0.0-*",
-        "Microsoft.Scripting": "1.0.0-*"
+        "Microsoft.Scripting": "1.0.0-*",
+        "System.Data.SQLite": "1.0.0-*"
       }
     }
   },

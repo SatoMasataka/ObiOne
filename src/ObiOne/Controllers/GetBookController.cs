@@ -8,6 +8,7 @@ using System.Web;
 using ObiOne.Action;
 using ObiOne.Model;
 using System.Net;
+using WebApi.OutputCache.V2;
 
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -22,6 +23,7 @@ namespace ObiOne.Controllers
     {
         // GET: api/values
         [HttpGet]
+        [CacheOutput(NoCache = true)]
         public RootObject Get(string title, string author, int page = 1)
         {
             RakutenApiHandler r = new RakutenApiHandler();
@@ -34,9 +36,10 @@ namespace ObiOne.Controllers
         [HttpPost()]
         public object Post([FromBody]PostecData pos)
         {
-            //画像を引き伸ばし、サーバーに保存
+            //画像をサーバーに保存
             string url = pos.ImageUrl.ToString();
-            return new{ Path = RakutenApiHandler.MakePictureHighQuality(url)};
+            return new{ Path = RakutenApiHandler.SavePicture(url)};
+
         }
         public class PostecData
         {
