@@ -64,6 +64,8 @@ namespace ObiOne.Action
         /// <param name="model"></param>
         public void RegistObi(Item bookData,string imgData, LoginInfoModel loginInfo)
         {
+            if (loginInfo == null) return;
+
             // Base64で上がってくる画像データをjpgで保存
             byte[] bs = System.Convert.FromBase64String(imgData.Split(',')[1]);
 

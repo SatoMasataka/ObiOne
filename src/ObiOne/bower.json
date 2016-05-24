@@ -5,6 +5,7 @@
     "angular": "~1.4.7",
     "easeljs": "*",
     "tweenjs": "*",
-    "ui-router": "*"
+    "ui-router": "*",
+    "jQuery": "*"
   }
 }

@@ -2,11 +2,24 @@
     <div>
         <p>{{loginInfo.Name}}　さんのマイページ</p>
     </div>
-    <a ng-click="toSearchBook()">帯を作る</a>
-    
-    <div>作成した帯</div>
+
+    <h3>仮想書店一覧</h3>
+    <div style="text-align:left;width:100%" class="col-xs-12">       
+        <div ng-repeat="s in MyShopList">
+            {{s.ShopName}}
+            <input type="button"ng-click="toShop(s.ShopId)" value="公開ページ"/>
+            <input type="button" ng-click="toEditShop(s.ShopId)" value="編集ページ"/>
+        </div>
+    </div>
+
+    <h3>作成した帯</h3>
     <div ng-repeat="o in ObiList" class="col-xs-2" ng-click="DispWiondowOpen(o)" style="margin:10px;cursor:pointer">
         <img src="{{o.ImgPath}}" style="width:100%"/>
+    </div>
+     
+    
+    <div style="text-align:left;width:100%" class="col-xs-12">
+        <a>個人設定</a>
     </div>
 </div>
 
@@ -21,6 +34,7 @@
             <img ng-src="{{Detail.ImgPath}}" style="width:90%;" />
         </div>
         <div style="height: 60px;">
+            <a  ng-click='ToRakutenPage(Detail.Link)'> 楽天商品ページ</a>
             <input type="button" ng-click="DeleteObi(Detail.ObiId)" style="float:right;margin-top:5px" value="削除" class="decolatedBtn">
         </div>
     </div>

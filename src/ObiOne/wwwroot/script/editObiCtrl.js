@@ -119,6 +119,9 @@
                     case "1":
                         _GenerateObiContent_Tp1(contentInfo);
                         break;
+                    case "2":
+                        _GenerateObiContent_Tp2(contentInfo);
+                        break;
                 }
 
                 Obi.addChild(loopContainer);
@@ -147,6 +150,7 @@
         var txt = new createjs.Text(contentInfo.Tp0.Text, txtStr, contentInfo.Tp0.Color);
         txt.textAlign = "left";
         txt.textBaseline = "middle";
+        txt.lineHeight = new createjs.Text("あ", txtStr, contentInfo.Tp0.Color).getMeasuredHeight() *1.2;//日本語フォント基準で調整しないと重なることがある
         txt.x = contentInfo.Position.X;
         txt.y = contentInfo.Position.Y;
         txt.rotation = contentInfo.Rotation;
@@ -156,8 +160,11 @@
 
         //最長の文字行を求める
         var longest = lines.sort(function (a, b) {
-            if (a.length < b.length) return 1;
-            if (a.length > b.length) return -1;
+            var aTxt = new createjs.Text(a, txtStr, contentInfo.Tp0.Color);
+            var bTxt = new createjs.Text(b, txtStr, contentInfo.Tp0.Color);
+
+            if (aTxt.getMeasuredWidth() < bTxt.getMeasuredWidth()) return 1;
+            if (aTxt.getMeasuredWidth() > bTxt.getMeasuredWidth()) return -1;
             return 0;
         })[0];
         var _longesttxt = new createjs.Text(longest, txtStr, contentInfo.Tp0.Color);
@@ -233,13 +240,42 @@
         } 
         loopContainer.addChild(shape);
     }
+
+    //種別：画像
+    function _GenerateObiContent_Tp2(contentInfo) {
+        if (!contentInfo.Tp2.ImgPath
+           || !contentInfo.Tp2.Size) return;
+
+        var img = new createjs.Bitmap(contentInfo.Tp2.ImgPath);
+
+        img.scaleX = contentInfo.Tp2.Size;
+        img.scaleY = contentInfo.Tp2.Size;
+
+        img.x = contentInfo.Position.X;
+        img.y = contentInfo.Position.Y;
+
+        //軸はセンターで
+        img.regX = img.image.width / 2;
+        img.regY = img.image.height / 2;
+
+        img.rotation = contentInfo.Rotation;
+
+        loopContainer.addChild(img);
+    }
 });
 
-myApp.controller('editObiCtrl', ['$scope', '$resource', '$modal', '$rootScope', '$location', 'editObiObject', 'editCanvasService', 'cpService',
-function ($scope, $resource, $modal, $rootScope, $location, editObiObject, editCanvasService, cpService) {
+myApp.controller('editObiCtrl', ['$scope', '$resource', '$modal', '$rootScope', '$location','$http', 'editObiObject', 'editCanvasService', 'cpService',
+function ($scope, $resource, $modal, $rootScope, $location, $http,editObiObject, editCanvasService, cpService) {
 
     var api_getbook = $resource("ObiOne/GetBook"); //api
-    var api_registObi = $resource("ObiOne/RegistObi"); //apiパス
+    var api_registObi = $resource("ObiOne/RegistObi"); //api
+    var api_upload = $resource("ObiOne/Upload", {}, {
+        post: {
+            method: 'POST',
+            transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined}
+        },
+    }); 
 
     //帯生成情報初期値セット
     $scope.ObiInfo = { ObiHeightPercentage: 20, ObiColor: "#3df509", Contents: [] };
@@ -255,12 +291,18 @@ function ($scope, $resource, $modal, $rootScope, $location, editObiObject, editC
             Tp1: {
                 SizeX: 50, SizeY: 50, Color: "", Type: "0"
             },
+            Tp2: {
+                ImgPath: "", Size: 1
+            },
         };
     }
 
 
     /*ページ表示時*/
     $scope.initDisp = function () {
+        //データが無いときは検索に戻す
+        if (!editObiObject.bookData) $scope.btnToSearchClick();
+
         //クエリストリングをはずすと大きい画像のurlになる
         var imgUrl = (editObiObject.bookData.largeImageUrl).split("?")[0];
         $scope.bookData = editObiObject.bookData;
@@ -268,6 +310,10 @@ function ($scope, $resource, $modal, $rootScope, $location, editObiObject, editC
         //サーバーに表紙画像を保存(canvasの画像出力のため)
         api_getbook.save({ ImageUrl: imgUrl }, function (p) {
             editCanvasService.PageInitCanvas(p.Path, $scope.ObiInfo);
+        },
+        function () {
+            alert("通信エラー：しばらくしてからもう一度アクセスしてください。");
+            $scope.btnToSearchClick();
         });
     }
 
@@ -291,7 +337,6 @@ function ($scope, $resource, $modal, $rootScope, $location, editObiObject, editC
     }
     /*キャンバスクリック*/
     $scope.canvasClick = function () {
-        //if ($scope.changePosIdx=="") return;
 
         var mPosi = editCanvasService.GetMousePosition();
         $scope.ObiInfo.Contents[$scope.changePosIdx].Position = mPosi;
@@ -317,15 +362,16 @@ function ($scope, $resource, $modal, $rootScope, $location, editObiObject, editC
         });
     }
 
-    /*画像選択ボタンクリック*/
-    $scope.btnSelectImgClick = function () {
-        $scope.StmpFolders = [{ Name: "テスト", Num: 2 }, { Name: "乗り物", Num: 1 }];
-        //ダイアログを出す
-        modalInstance_Img = $modal.open({
-            templateUrl: "W_SelectImg",
-            scope: $scope
-        });
+    //楽天商品ページ表示
+    $scope.ToRakutenPage = function (url) {
+        window.open(url, "window_name", "scrollbars=yes");
     }
+
+    /*検索に戻るボタンクリック*/
+    $scope.btnToSearchClick = function () {
+        $location.path("/searchBook");
+    }
+   
 
     //ダイアログ内：登録ボタン
     $scope.btnRegistObiClick = function () {
@@ -344,8 +390,96 @@ function ($scope, $resource, $modal, $rootScope, $location, editObiObject, editC
         );
     }
 
-    //画像選択ダイアログ内
+    /*画像選択ボタンクリック*/
+    $scope.btnSelectImgClick = function (tgt) {
+
+        $scope.StmpFolders = [{ Name: "テスト", Num: 2 }, { Name: "乗り物", Num: 1 }];
+        $scope.CurrentFolder = $scope.StmpFolders[0];
+        $scope.SelectImgTarget = tgt;   //値を返すターゲット
+
+        //ダイアログを出す
+        modalInstance_Img = $modal.open({
+            templateUrl: "W_SelectImg",
+            scope: $scope
+        });
+    }
+
+    //画像選択ダイアログ内:カテゴリクリック
     $scope.showImgFilesInFolder = function (stmpFol) {
         $scope.CurrentFolder = stmpFol;
     }
+
+    //画像選択ダイアログ内:画像クリック
+    $scope.returnImgPath = function (url) {
+        $scope.SelectImgTarget.Tp2.ImgPath = url;
+        modalInstance_Img.close();
+    }
+
+    //画像選択ダイアログ内ファイルアップクリック
+    $scope.btnUploadCkick = function () {
+        if (!$scope.file) {
+            alert("エラー：画像データがありません。");
+            return;
+        }
+        //if ($scope.StmpFolders["MY"] && $scope.StmpFolders["MY"].Num > 20) {
+        //    alert("エラー：これ以上アップロードできません。不要なファイルを削除してください。");
+        //    return;
+        //}
+
+        //生成したデータをDBに登録
+        //post
+        var fd = new FormData();
+        fd.append('logininfo', $scope.loginInfol);
+        fd.append('file', $scope.file);
+        $http.post('ObiOne/Upload', fd, {
+            transformrequest: null,
+            headers: { 'content-type': undefined }
+        })
+        .success(function () {
+            alert("aa");
+        });
+
+        //pi_upload.save(fd);
+        //, function () {
+        //    alert("アップ。");
+        //    //modalInstance.close();
+        //    //$location.path("/myPage");
+        //},
+        //    //失敗時
+        //    function () { alert("通信エラー：しばらくしてからもう一度アクセスしてください。"); }
+        //);
+
+        //var stage = new createjs.Stage("c2");
+        // preload.jsで読み込んだ素材を保持する変数。
+        //var assets = {};
+
+        // preloadjsを使って画像を読み込む。
+        //var imgPath = "https://cdn.teratail.com/img/about/imgAboutLogo.png";
+        //var loadManifest = [{ id: "img", src: imgPath }];
+        //var loader = new PreloadJS(false);
+        //loader.onFileLoad = function (event) {
+        //    assets[event.id] = event.result;
+        //}
+        //loader.onComplete = function () {
+        //    var img = new createjs.Bitmap(assets["img"]);
+        //    stage.addChild(img);
+        //    stage.update();
+        //    var fl = stage.toDataURL();
+
+        //    api_upload.save({ File:  fl, LoginInfo: $scope.loginInfo }, function () {
+        //        alert("ファイルアップロードしました。");   
+        //    },
+        //    失敗時
+        //    function () { alert("通信エラー：しばらくしてからもう一度アクセスしてください。"); }
+        //);
+        //}
+        //loader.loadManifest(loadManifest);
+
+        
+
+       
+        
+    }
+
+
 }]);

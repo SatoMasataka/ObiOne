@@ -1,4 +1,9 @@
-﻿<!--確認用ダイアログ-->
+﻿<style>
+
+</style>
+
+
+<!--確認用ダイアログ-->
 <script type="text/ng-template" id="W_Regist">
     <div class="modal-body">
         <button type="button" class="close" ng-click="$dismiss()">&times;</button>
@@ -14,26 +19,43 @@
         </div>
     </div>
 </script>
-<!--画像選択-->
+<!--画像選択ダイアログ-->
 <script type="text/ng-template" id="W_SelectImg">
     <div class="modal-body">
         <button type="button" class="close" ng-click="$dismiss()">&times;</button>
-        <span ng-repeat="f in StmpFolders" ng-click="showImgFilesInFolder(f)">
+        <!--カテゴリエリア-->
+        <span ng-repeat="f in StmpFolders" ng-click="showImgFilesInFolder(f)" class="imgCategory" style="cursor:pointer"
+              ng-style="{'background-color': (CurrentFolder == f) ? 'yellow' : 'none'}">
             {{f.Name}}
         </span>
-        <div ng-repeat="i in range(CurrentFolder.Num)">
-            <img  src="img/stmp/{{CurrentFolder.Name}}/{{i}}.png"/>
-        </div>
+
+        <!--
+        <span ng-show="loginInfo" class="imgCategory" style="cursor:pointer" ng-click="showImgFilesInFolder('MY')"
+               ng-style="{'background-color': (CurrentFolder == 'MY') ? 'yellow' : 'none'}">
+            Myアップロード
+        </span>
+        <br>
+        <div ng-show="loginInfo && CurrentFolder=='MY'">
+            <input type="file" file-model="file"/>
+            <input type="button" ng-click="btnUploadCkick()" value="アップロード"/>
+        </div>-->
+
+        <!--画像表示エリア-->
+        <span ng-repeat="i in range(CurrentFolder.Num)">
+            <img  src="img/stmp/{{CurrentFolder.Name}}/{{i}}.png" style="width:20%;cursor:pointer"
+                  ng-click="returnImgPath('img/stmp/'+CurrentFolder.Name+'/'+i+'.png')"/>
+        </span>
     </div>
 </script>
 <div >
      <div style="width:60%;float:left"  >
+         <a ng-click='ToRakutenPage(bookData.affiliateUrl)'> 楽天商品ページ</a>
+         <input type="button" value="書籍検索へ" ng-click="ToSearchBook()">
          <div>{{bookData.title}} {{bookData.author}}</div>
          <div style="background-color:black;width:800px;height:800px">
             <canvas id="main-canvas" width=800 height=800 ng-click="canvasClick(changePosIdx)"></canvas>
          </div>
-        <input type="button" value="帯画像を生成" ng-click="btnCommitClick()">
-       
+        <input type="button" value="帯画像を生成" ng-click="btnCommitClick()" class="decolatedBtn">
     </div>
 
     <div style="width:40%;float:left"  ng-init="initDisp()" >
@@ -59,6 +81,7 @@
                     角度:<input type="text" ng-model="con.Rotation" ng-change="updateObi()" />
                 </div>
 
+                <!--テキストの場合-->
                 <div ng-show="con.PartsType==0">
                     <div>
                         テキスト:<textarea ng-model="con.Tp0.Text" ng-change="updateObi()" ng-trim="false"></textarea>
@@ -103,13 +126,14 @@
                        
                     </div>
                 </div>
+
+                <!--図形の場合-->
                 <div ng-show="con.PartsType==1">
                     図形タイプ：
                     <select ng-model="con.Tp1.Type" ng-change="updateObi()">
                         <option value="0">なし </option>
                         <option value="1">丸 </option>
                         <option value="2">四角形 </option>
-                        <option value="3">角丸四角形 </option>
                         <option value="4">星 </option>
                         <option value="5">多角形 </option>
                         <option value="6">線 </option>
@@ -134,8 +158,20 @@
                         線の太さ:<input type="text" ng-model="con.Tp1.LineSize" ng-change="updateObi()" />
                     </div>
                 </div>
+
+                <!--画像の場合-->
                 <div ng-show="con.PartsType==2">
-                    <input type="button" value="画像選択" ng-click="btnSelectImgClick()"/>
+                    <span style="width:70%">
+                        <img ng-src="{{con.Tp2.ImgPath}}" style="max-width:100%;max-height:100px" ng-show="con.Tp2.ImgPath" />
+                       
+                    </span>
+                    <span style="width:30%">
+                        <input type="button" value="画像選択" ng-click="btnSelectImgClick(con)" />
+                    </span>
+                    
+                    <div>
+                        サイズ:<input type="text" ng-model="con.Tp2.Size" ng-change="updateObi()" />
+                    </div>                  
                 </div>
             </div>
     </div>

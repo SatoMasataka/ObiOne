@@ -35,9 +35,13 @@ namespace ObiOne.Controllers
             return ret;
         }
 
-        // POST api/values
+        /// <summary>
+        /// ユーザーの新規登録
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost()]
-        public GetReturnModel Post([FromBody]userSettingModel model)
+        public GetReturnModel Post([FromBody]GetReturnModel model)
         {
             var glh = new LoginHandler();
             GetReturnModel ret = new GetReturnModel();
@@ -67,12 +71,5 @@ namespace ObiOne.Controllers
             public string registFlg { get; set; }
             public LoginInfoModel loginInfo { get; set; }
         }
-
-        public class userSettingModel
-        {
-            public string mode { get; set; }
-            public LoginInfoModel loginInfo { get; set; }
-        }
-       
     }
 }

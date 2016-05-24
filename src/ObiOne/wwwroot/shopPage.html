@@ -1,0 +1,48 @@
+﻿<div ng-init="initDisp()">
+    <div ng-show="!noData">
+        <div>仮想書店</div>
+        <h3>{{ShopInfo.ShopName}}　
+            <span style="font-size:smaller"> オーナー：{{ ShopInfo.OwnerInfo.Name}}</span>
+        </h3>
+
+        {{ShopInfo.ShopComment}}
+
+        <!--平積みエリア-->
+        <div class="col-xs-12" style="background-size:cover" ng-if="bgPath" ng-style="{'background-image':'url({{bgPath}})'}">
+            <span class="col-xs-3" ng-repeat="s in ShopInfo.ShopObiList" style="padding-top:20px;padding-bottom:20px">
+
+                <img ng-show="s.ObiInfo.ImgPath" ng-src="{{s.ObiInfo.ImgPath}}" style="width:100%;text-align:center;cursor:pointer;" 
+                     ng-click="DispWiondowOpen(s.ObiInfo)"/>
+                <span ng-show="!s.ObiInfo.ImgPath" style="width:100%;min-height:100px;"></span>
+            </span>
+        </div>
+        <div  class="col-xs-12" style="text-align:right">
+            この書店のURL:
+            <input type="text" id="foo" ng-model="thisUrl" size="60">
+            <button class="cpbtn" data-clipboard-target="#foo">
+                クリップボードにコピー
+            </button>
+        </div>
+        
+    </div>
+    <div ng-show="noData" >
+        <h2 style="color:red">仮想書店が見つかりません</h2>
+        <h3>お探しのページは存在しないかまたは削除された可能性があります。</h3>
+    </div>
+</div>
+
+<!--表示ダイアログ-->
+<script type="text/ng-template" id="W_Disp">
+    <div class="modal-body">
+        <button type="button" class="close" ng-click="$dismiss()">&times;</button>
+        <div>{{Detail.BookTitle}} </div>
+        <div>{{Detail.Author}}</div>
+        <div>{{Detail.Publisher}}</div>
+        <div style="width:100%;text-align:center;vertical-align:middle">
+            <img ng-src="{{Detail.ImgPath}}" style="width:90%;" />
+        </div>
+        <div style="height: 60px;">
+            <a ng-click='ToRakutenPage(Detail.Link)'> 楽天商品ページ</a>
+        </div>
+    </div>
+</script>

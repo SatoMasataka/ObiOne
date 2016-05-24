@@ -47,6 +47,7 @@ namespace ObiOne.Action
             //パラメタセット
             NameValueCollection nameValue = new NameValueCollection();
             nameValue.Add("applicationId", "1066764158692643350");
+            nameValue.Add("affiliateId", "14d99458.7ef47fc5.14d99459.b7b2a47f");
             nameValue.Add("formatVersion", "2");
             nameValue.Add("size", "0");
             nameValue.Add("outOfStockFlag", "1");

@@ -17,6 +17,19 @@ myApp.directive("repeatFinished", function($timeout){
         }
     }
 });
+myApp.directive('fileModel', function ($parse) {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            var model = $parse(attrs.fileModel);
+            element.bind('change', function () {
+                scope.$apply(function () {
+                    model.assign(scope.$parent.$parent.$parent, element[0].files[0]);
+                });
+            });
+        }
+    };
+});
 
 //画面共通サービス
 myApp.service('commonService', ['$location', '$rootScope', '$resource', function ($location, $rootScope, $resource) {
@@ -67,6 +80,18 @@ myApp.config(['$routeProvider', '$locationProvider', '$httpProvider', function (
         .when('/userSetting', {
             templateUrl: 'userSetting.html',
             controller: 'userSettingCtrl'
+        })
+        .when('/editShop', {
+            templateUrl: 'editShop.html',
+            controller: 'editShopCtrl'
+        })
+        .when('/editShop/:shopId', {
+            templateUrl: 'editShop.html',
+            controller: 'editShopCtrl'
+        })
+        .when('/shopPage/:shopId', {
+            templateUrl: 'shopPage.html',
+            controller: 'shopPageCtrl'
         }) 
         .when('/top', {
             templateUrl: 'top.html',
@@ -130,7 +155,15 @@ myApp.controller('menuCtrl', ['$scope','$location', 'commonService',function ($s
     $scope.ToMyPage=function(){
         $location.path("/myPage");
     };
-    $scope.LogOff=function(){
+    $scope.ToEditShop = function () {
+        $location.path("/editShop");
+    };
+    $scope.LogOff = function () {
+        if(confirm("ログオフします。よろしいですか？"))
+            commonService.logOff();
+    }
+    $scope.ToTop = function () {
+
         commonService.logOff();
     }
     $scope.IsTop = function () {

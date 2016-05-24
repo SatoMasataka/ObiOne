@@ -74,7 +74,7 @@ namespace ObiOne.Action
                         if (count > 0) throw new Exception("登録データが複数件存在します。");
 
                         LoginInfo.Id = Convert.ToString(reader["ID"].ToString());
-                        LoginInfo.Name = Convert.ToString(reader["NAME"].ToString());//ここでうまく取れていない
+                        LoginInfo.Name = Convert.ToString(reader["NAME"].ToString());
                         LoginInfo.GoogleId = Convert.ToString(reader["GOOGLE_ID"].ToString());
                         count++;
                     }

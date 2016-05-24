@@ -27,18 +27,15 @@ namespace ObiOne.Controllers
 
         // POST api/values
         [HttpPost()]
-        public void Post([FromBody] RegistObiInfo inf)
+        public void Post([FromBody] PostedData pos)
         {
+            //情報チェック
+            if (!pos.LoginInfo.Check()) throw new Exception("ログイン情報不正");
+
             //帯を保存
             RegistObiHandler roh = new RegistObiHandler();
-            roh.RegistObi(inf.BookData, inf.Imgdata, inf.LoginInfo);
+            roh.RegistObi(pos.BookData, pos.Imgdata, pos.LoginInfo);
          
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
         }
 
         // DELETE api/values/5
@@ -51,7 +48,7 @@ namespace ObiOne.Controllers
 
         }
 
-        public class RegistObiInfo
+        public class PostedData
         {
             public string Imgdata { get; set; }
             public Item BookData { get; set; }

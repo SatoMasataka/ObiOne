@@ -26,8 +26,6 @@
         "System.Web": "4.0.0.0"
       },
       "dependencies": {
-        "IronPython": "1.0.0-*",
-        "IronPython.Modules": "1.0.0-*",
         "Microsoft.Dynamic": "1.0.0-*",
         "Microsoft.Scripting": "1.0.0-*",
         "System.Data.SQLite": "1.0.0-*"

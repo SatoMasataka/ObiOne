@@ -21,7 +21,11 @@ body {
 a{
     cursor:pointer;
 }
-
+input[type=text]{
+    font-size:15px;
+    width:250px;
+    height:25px;
+}
 
 /* メインの囲い　*/
 .wrapper{

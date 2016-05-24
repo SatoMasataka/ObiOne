@@ -22,6 +22,8 @@ http://dev.classmethod.jp/client-side/javascript/ngscreentransitionsample/
 
 楽天api
 https://webservice.rakuten.co.jp/api/booksbooksearch/
+あふぃ里　14d99458.7ef47fc5.14d99459.b7b2a47f
+
 
 angular 認証 
 http://liginc.co.jp/web/js/other-js/160349
@@ -46,6 +48,8 @@ base44->バイト配列->画像　いける？
 http://note.chiebukuro.yahoo.co.jp/detail/n151474
 http://dobon.net/vb/dotnet/string/base64.html
 
+webApiでセッション
+http://takepara.blogspot.jp/2012/04/web-apisession.html
 ========================================
 【ライブラリ】
 colorpicker js
