@@ -5,8 +5,8 @@
         <div>店舗に配置する帯画像を選択してください</div>
        
         <table>
-            <tr ng-repeat="i in range(ObiList.length/4)">
-                <td ng-repeat="ol in ObiList| limitTo: 4:i*4">
+            <tr ng-repeat="i in range(ObiList.length/6)">
+                <td ng-repeat="ol in ObiList| limitTo: 6:i*6">
                     <img ng-src="{{ol.ImgPath}}" style="width:100%;cursor:pointer" ng-click="returnObiInfo(ol)" />
                 </td>
             </tr>
@@ -34,12 +34,12 @@
         <h5>
             背景画像
         </h5>
-            <input type="radio" value="0" ng-model="ShopInfo.BackImg" ng-checked="true" style="vertical-align:top" name="BackImg" />
-            <img src="img/shopBg/bg0.jpg" style="width:15%" class="afterCheck" />
-            <input type="radio" value="1" ng-model="ShopInfo.BackImg" style="vertical-align:top" name="BackImg" />
-            <img src="img/shopBg/bg1.jpg" style="width:15%" class="afterCheck" />
-            <input type="radio" value="2" ng-model="ShopInfo.BackImg" style="vertical-align:top" name="BackImg" />
-            <img src="img/shopBg/bg2.jpg" style="width:15%" class="afterCheck" />
+            <input type="radio" value="0" ng-model="ShopInfo.BackImg" ng-checked="true" style="vertical-align:top" id="chkBkImg0"/>
+            <label for="chkBkImg0" style="width:15%"><img src="img/shopBg/bg0.jpg" style="width:100%" class="afterCheck" /></label>
+            <input type="radio" value="1" ng-model="ShopInfo.BackImg" style="vertical-align:top" id="chkBkImg1"/>
+             <label for="chkBkImg1" style="width:15%"><img src="img/shopBg/bg1.jpg" style="width:100%" class="afterCheck" /></label>
+            <input type="radio" value="2" ng-model="ShopInfo.BackImg" style="vertical-align:top" id="chkBkImg2"/>
+             <label for="chkBkImg2" style="width:15%"><img src="img/shopBg/bg2.jpg" style="width:100%" class="afterCheck" /></label>
     </div>
     <br>
     <br>
@@ -50,9 +50,11 @@
         <div ng-repeat="sol in ShopInfo.ShopObiList">
             <div class="col-xs-3" style="height:250px">
                 {{$index+1}}{{sol.BookTitle}} {{sol.Author}}
-                <input type="button" value="選択" ng-click="dispSelectObiWindow($index)" />
-                <input type="button" value="削除" ng-click="removeObiInfo($index)" />
-                <div> <img ng-src="{{sol.ObiInfo.ImgPath}}" style="max-width:100%;max-height:200px"></div>
+                <img class="icn" src="img/icn/magnifying-glass.png" alt="選択" ng-click="dispSelectObiWindow($index)"/>
+                <img class="icn" src="img/icn/error.png" alt="削除" ng-click="removeObiInfo($index)" />
+                <div style="margin-top:10px"> 
+                    <img ng-src="{{sol.ObiInfo.ImgPath}}" style="max-width:100%;max-height:200px">
+                </div>
             </div>
         </div>
     </div>

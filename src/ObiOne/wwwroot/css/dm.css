@@ -27,6 +27,11 @@ input[type=text]{
     height:25px;
 }
 
+.icn {
+    width:25px;
+    cursor:pointer;
+}
+
 /* メインの囲い　*/
 .wrapper{
     background:#ffffff; 
@@ -84,7 +89,9 @@ background-color: #d7efd7;
      margin-bottom:10px;
 }
 
-
+.afterCheck{
+    cursor:pointer;
+}
 
 input[type=button].decolatedBtn {
   display: inline-block;
@@ -147,4 +154,45 @@ input[type=button].decolatedBtn :active {
   background-image: -o-linear-gradient(top, #005eb6 0%, #006BCF 100%);
   background-image: linear-gradient(top, #005eb6 0%, #006BCF 100%);
   padding: 13px 30px 11px 30px;
+}
+
+/*アコーディオン*/
+.accHeader {
+   display: block;
+	cursor: pointer;
+	width: 100px;
+	margin: 0;
+	padding: 5px;
+	background-color: #a1b91d;
+	color: #fff;
+	font-size: 16px;
+	text-align: center;
+	line-height: 1;
+	transition: .2s;
+    float:right;
+}
+
+input[type="checkbox"].on-off{
+    display: none;
+}
+
+.accBody {
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -ms-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+
+input[type="checkbox"].on-off + .accBody{
+    height: 0;
+    overflow: hidden;
+}
+
+input[type="checkbox"].on-off:checked + .accBody{
+    height: 150px;
 }

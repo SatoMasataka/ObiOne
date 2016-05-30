@@ -56,3 +56,8 @@ colorpicker js
 http://www.html5.jp/library/cpick.html
 (ただしそのままではAngularに適応できないので)
 http://qiita.com/ryounagaoka/items/a48d3a4c4faf78a99ae5
+
+
+
+アイコン
+http://www.flaticon.com/free-icon/edit_148926#term=edit&page=1&position=3

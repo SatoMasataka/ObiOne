@@ -8,10 +8,7 @@ function ($scope, $resource, $location, $modal, $rootScope,$routeParams,commonSe
         //認証＋登録チェック
         commonService.checkAuth_regist();
         
-        $(".afterCheck").on("click", function (o) {
-            var p = $(o.target).prev();
-            p.prop("checked", true);
-        });
+        commonService.commonBind();
         
         if ($routeParams.shopId) {
             /*編集時:データDBをから取得  */
@@ -69,8 +66,6 @@ function ($scope, $resource, $location, $modal, $rootScope,$routeParams,commonSe
         modalInstance.close();
     }
 
-
-
     //登録ボタン
     $scope.btnRegistObiClick = function () {
         //入力チェック
@@ -94,7 +89,7 @@ function ($scope, $resource, $location, $modal, $rootScope,$routeParams,commonSe
     $scope.deleteShop = function () {
         if (!confirm("この店舗を削除しますか？")) return;
 
-        api_shop.delete({ ShopId: $scope.ShopInfo.ShopId }, function () {
+        api_shop.delete({ ShopId: $scope.ShopInfo.ShopId, AccessToken: $rootScope.loginInfo.accessToken }, function () {
             alert("仮想店舗を削除しました");
             $location.path("/myPage");
         },

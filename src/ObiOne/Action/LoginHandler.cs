@@ -20,7 +20,7 @@ namespace ObiOne.Action
         /// </summary>
         private string AccessToken;
 
-        private string SQLITE_PATH { get { return Startup.Configuration["AppPath:SqlitePath"]; } }
+        private static string SQLITE_PATH { get { return Startup.Configuration["AppPath:SqlitePath"]; } }
 
         /// <summary>
         /// OAuthのユーザー情報
@@ -28,7 +28,7 @@ namespace ObiOne.Action
         public UserInfoModel UserInfoOfGoogle {
             get {
                 if (_userInfo == null)
-                    _userInfo = GetUserInfo();
+                    _userInfo = GetUserInfo(this.AccessToken);
                 return _userInfo;
             }
         }
@@ -40,7 +40,7 @@ namespace ObiOne.Action
         public LoginInfoModel LoginInfo { get; set; }
 
         /// <summary>
-        /// ログインされているかチェック
+        /// 本アプリで登録されているかチェック
         /// </summary>
         /// <returns>0:未登録　1:登録済み</returns>
         public string IsAlmostLogin(string accessToken) {
@@ -48,47 +48,19 @@ namespace ObiOne.Action
 
             //基本的にここには引っかからないはず
             if (this.UserInfoOfGoogle == null) throw new Exception("Googleのログインデータが取得できません");
+            this.LoginInfo = getUserInfoFromGoogleId(this.UserInfoOfGoogle.id);
 
-            //DBにユーザーデータがあるかチェック
-            using (var conn = new SQLiteConnection("Data Source=" + SQLITE_PATH))
+
+            if (this.LoginInfo !=null)   //すでに登録済みの場合
+                return "1";
+            else //未登録＝これから新規登録の場合
             {
-                //登録データの取得
-                conn.Open();
-                SQLiteCommand command = conn.CreateCommand();
-                command.CommandText = "SELECT ID,NAME,GOOGLE_ID " +
-                                      "FROM USER_INFO "+
-                                      "WHERE GOOGLE_ID = @google_id " +
-                                      "AND DELETE_FLG = @delete_flg; ";
-                command.Parameters.Add("google_id", System.Data.DbType.String).Value = this.UserInfoOfGoogle.id;
-                command.Parameters.Add("delete_flg", System.Data.DbType.Int16).Value = 0;
-                int count = 0;
-                this.LoginInfo = new LoginInfoModel();
-                using (SQLiteDataReader reader = command.ExecuteReader())
-                {
-                    
-                    while (reader.Read())
-                    {
-                        if (!reader.HasRows) continue;
+                this.LoginInfo = new LoginInfoModel() { AccessToken = accessToken };
 
-                        //通常はここに引っかからないはず
-                        if (count > 0) throw new Exception("登録データが複数件存在します。");
-
-                        LoginInfo.Id = Convert.ToString(reader["ID"].ToString());
-                        LoginInfo.Name = Convert.ToString(reader["NAME"].ToString());
-                        LoginInfo.GoogleId = Convert.ToString(reader["GOOGLE_ID"].ToString());
-                        count++;
-                    }
-                }
-
-                if (count > 0)   //すでに登録済みの場合
-                    return "1";
-                else //未登録＝これから新規登録の場合
-                {
-                    //グーグル登録名を
-                    this.LoginInfo.Name = UserInfoOfGoogle.name;
-                    this.LoginInfo.GoogleId = this.UserInfoOfGoogle.id;
-                    return "0";
-                }
+                //グーグル登録名を
+                this.LoginInfo.Name = UserInfoOfGoogle.name;
+                this.LoginInfo.GoogleId = this.UserInfoOfGoogle.id;
+                return "0";
             }
         }
 
@@ -149,18 +121,49 @@ namespace ObiOne.Action
             return this.LoginInfo;
         }
 
+        /// <summary>
+        /// 認証チェック・ログイン情報整合性チェック
+        /// </summary>
+        /// <param name="infoFromCli"></param>
+        /// <returns></returns>
+        public static bool Auth_LoginInfoCheck(LoginInfoModel infoFromCli)
+        {
+            try
+            {
+                //googleアカウント
+                var gooA = GetUserInfo(infoFromCli.AccessToken);
+                //アプリアカウント
+                var appA = getUserInfoFromGoogleId(gooA.id);
 
+                //クライアントから上がってきた情報と齟齬があるとNG
+                if (appA.Id != infoFromCli.Id)
+                    return false;
+                return true;
+            }
+            catch { return false; }
 
+        }
 
+        /// <summary>
+        /// アクセストークンからシステムでのID取得
+        /// </summary>
+        /// <param name="accToken"></param>
+        /// <returns></returns>
+        public static string GetIdFromToken(string accToken)
+        {
+            return getUserInfoFromGoogleId(GetUserInfo(accToken).id).Id;
+        }
         /// <summary>
         /// アクセストークンを元にGoogle認証データ取得
         /// </summary>
         /// <param name="accessToken"></param>
-        private UserInfoModel GetUserInfo()
+        private static UserInfoModel GetUserInfo(string accToken)
         {
             WebClient wc = new WebClient();
             NameValueCollection nameValue = new NameValueCollection();
-            nameValue.Add("access_token", AccessToken);
+
+            //string ac = string.IsNullOrEmpty(accToken) ? AccessToken : accToken;
+            nameValue.Add("access_token", accToken);
             wc.QueryString = nameValue;
             
             wc.Headers.Add("user-agent",
@@ -169,6 +172,49 @@ namespace ObiOne.Action
             
             string result = wc.DownloadString(@"https://www.googleapis.com/oauth2/v2/userinfo");
             return JsonConvert.DeserializeObject<UserInfoModel>(result);
+        }
+
+        /// <summary>
+        /// gooogleIDからユーザー情報取得
+        /// ユーザー未登録ならnullを返す
+        /// </summary>
+        /// <param name="googleId"></param>
+        /// <returns></returns>
+        private static LoginInfoModel getUserInfoFromGoogleId(string googleId)
+        {
+            //DBにユーザーデータがあるかチェック
+            using (var conn = new SQLiteConnection("Data Source=" + SQLITE_PATH))
+            {
+                //登録データの取得
+                conn.Open();
+                SQLiteCommand command = conn.CreateCommand();
+                command.CommandText = "SELECT ID,NAME,GOOGLE_ID " +
+                                              "FROM USER_INFO " +
+                                              "WHERE GOOGLE_ID = @google_id " +
+                                              "AND DELETE_FLG = @delete_flg; ";
+                command.Parameters.Add("google_id", System.Data.DbType.String).Value = googleId;
+                command.Parameters.Add("delete_flg", System.Data.DbType.Int16).Value = 0;
+                int count = 0;
+                LoginInfoModel loginInfo = null;
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+
+                    while (reader.Read())
+                    {
+                        if (!reader.HasRows) continue;
+
+                        //通常はここに引っかからないはず
+                        if (count > 0) throw new Exception("登録データが複数件存在します。");
+
+                        loginInfo = new LoginInfoModel();
+                        loginInfo.Id = Convert.ToString(reader["ID"].ToString());
+                        loginInfo.Name = Convert.ToString(reader["NAME"].ToString());
+                        loginInfo.GoogleId = Convert.ToString(reader["GOOGLE_ID"].ToString());
+                        count++;
+                    }
+                }
+                return loginInfo;
+            }
         }
     }
 }

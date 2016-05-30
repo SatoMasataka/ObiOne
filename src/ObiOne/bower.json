@@ -1,11 +1,14 @@
 {
-	"name": "ASP.NET",
-	"private": true,
+  "name": "ASP.NET",
+  "private": true,
   "dependencies": {
-    "angular": "~1.4.7",
+    "angular": "~1.5.6",
     "easeljs": "*",
     "tweenjs": "*",
     "ui-router": "*",
-    "jQuery": "*"
+    "angular-jquery-wrapper": "*"
+  },
+  "resolutions": {
+    "angular": "^1.0.8"
   }
 }

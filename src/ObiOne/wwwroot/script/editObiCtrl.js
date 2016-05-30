@@ -264,8 +264,8 @@
     }
 });
 
-myApp.controller('editObiCtrl', ['$scope', '$resource', '$modal', '$rootScope', '$location','$http', 'editObiObject', 'editCanvasService', 'cpService',
-function ($scope, $resource, $modal, $rootScope, $location, $http,editObiObject, editCanvasService, cpService) {
+myApp.controller('editObiCtrl', ['$scope', '$resource', '$modal', '$rootScope', '$location','$http', 'editObiObject', 'editCanvasService', 'cpService','commonService',
+function ($scope, $resource, $modal, $rootScope, $location, $http, editObiObject, editCanvasService, cpService, commonService) {
 
     var api_getbook = $resource("ObiOne/GetBook"); //api
     var api_registObi = $resource("ObiOne/RegistObi"); //api
@@ -279,7 +279,7 @@ function ($scope, $resource, $modal, $rootScope, $location, $http,editObiObject,
 
     //帯生成情報初期値セット
     $scope.ObiInfo = { ObiHeightPercentage: 20, ObiColor: "#3df509", Contents: [] };
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < 15; i++) {
         //帯Contentsデフォルト情報をセット
         $scope.ObiInfo.Contents[i] = {
             PartsType: "0",
@@ -319,7 +319,8 @@ function ($scope, $resource, $modal, $rootScope, $location, $http,editObiObject,
 
     //ng-repeatが完全に終了したイベント
     $scope.$on('repeatFinishedEventFired', function() {
-        cpService._cPickerInit();//cpick.jsの準備
+        //cpService._cPickerInit();//cpick.jsの準備
+        commonService.commonBind();
     });
 
     //////////

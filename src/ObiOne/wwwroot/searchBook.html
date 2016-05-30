@@ -10,6 +10,7 @@
 </style>
 <div class="post">
     <h2>帯画像を作成する書籍を選んでください。</h2>
+    <h5>※ 書籍によっては表紙画像の画質が粗いことがあります。ご了承ください。</h5>
     <div style="margin-bottom:5px;margin-top:5px;font-size:15px" class="col-xs-7">
         タイトル：<input type="text" ng-model="Title" style="width:250px;height:25px">&nbsp;&nbsp;&nbsp;&nbsp;
         著者名：<input type="text" ng-model="Author" style="width:250px;height:25px">
@@ -37,6 +38,7 @@
         <span ng-repeat="p in Paging" >
             <a ng-click="ChangePage(p.No)" class="paging" ng-show="p.No != NowPage"> {{p.No}} </a>
             <span class="paging" ng-show="p.No == NowPage"> {{p.No}} </span>
+            <br ng-show="p.No==50">
         </span>
     </div>
    

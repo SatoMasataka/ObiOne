@@ -25,12 +25,15 @@ namespace ObiOne.Controllers
             return roh.GetObi(id);
         }
 
-        // POST api/values
+        /// <summary>
+        /// 帯新規登録
+        /// </summary>
+        /// <param name="pos"></param>
         [HttpPost()]
         public void Post([FromBody] PostedData pos)
-        {
+        {            
             //情報チェック
-            if (!pos.LoginInfo.Check()) throw new Exception("ログイン情報不正");
+            if (!LoginHandler.Auth_LoginInfoCheck(pos.LoginInfo)) throw new Exception("ログイン情報不正");
 
             //帯を保存
             RegistObiHandler roh = new RegistObiHandler();
@@ -40,12 +43,13 @@ namespace ObiOne.Controllers
 
         // DELETE api/values/5
         [HttpDelete()]
-        public void Delete(string obiId)
+        public void Delete(string obiId,string accessToken)
         {
+            //所有者のIDを取得
+            string id = LoginHandler.GetIdFromToken(accessToken);
+
             RegistObiHandler roh = new RegistObiHandler();
-            roh.DeleteObi(obiId);
-
-
+            roh.DeleteObi(obiId,id);
         }
 
         public class PostedData

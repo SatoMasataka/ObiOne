@@ -16,9 +16,23 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
 
+    <!-- jquery-ui -->
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/clipboard.js/1.5.3/clipboard.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.0/jquery-ui.min.js" type="text/javascript"></script>
+    <!--
+    <script type="text/javascript" src="./lib/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="./lib/angular/angular.js"></script>
+    <script type="text/javascript" src="./lib/jquery-ui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="./lib/angular-jquery-wrapper/lib/multidatespickr/jquery-ui.multidatespicker.js"></script>
+    <script type="text/javascript" src="./lib/angular-jquery-wrapper/dist/angular-jquery-wrapper-core.js"></script>
+    <script type="text/javascript" src="./lib/angular-jquery-wrapper/dist/multiDatesPicker.js"></script>
+    <script type="text/javascript" src="./lib/angular-jquery-wrapper/dist/jquery-ui.js"></script>-->
 
+    <!-- クリップボード -->
+    <script src="https://cdn.jsdelivr.net/clipboard.js/1.5.3/clipboard.min.js"></script>
+    
+
+    <!-- アプリjs -->
     <script type="text/javascript" src="./script/app.js" ></script>
     <script type="text/javascript" src="./script/searchBookCtrl.js"></script>
     <script type="text/javascript" src="./script/editObiCtrl.js"></script>
@@ -27,6 +41,7 @@
     <script type="text/javascript" src="./script/myPageCtrl.js" ></script>
     <script type="text/javascript" src="./script/editShopCtrl.js"></script>
     <script type="text/javascript" src="./script/shopPageCtrl.js"></script>
+
 
     <script type="text/javascript" src="script/google-plus-signin.js"></script>
     <script type="text/javascript" src="script/cpick.js"></script>
@@ -47,7 +62,7 @@
         <div id="menu" ng-show="loginInfo" >
             <ul>
                 <li><a ng-click="ToMyPage()">Myページ</a></li>
-                <li><a ng-click="ToSearchBook()">帯を作る</a></li>
+                <li><a ng-click="ToSearchBook()"> 帯を作る</a></li>
                 <li><a ng-click="ToEditShop()">仮想書店</a></li>
                 <li><a ng-click="LogOff()">ログオフ</a></li>
             </ul>

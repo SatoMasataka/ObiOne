@@ -102,7 +102,7 @@ namespace ObiOne.Action
         /// </summary>
         /// <param name="shopInfo"></param>
         /// <param name="loginInfo"></param>
-        public void DeleteShop(string shopId)
+        public void DeleteShop(string shopId,string id)
         {
             using (var conn = new SQLiteConnection("Data Source=" + Setting.SQLITE_PATH))
             {
@@ -116,13 +116,13 @@ namespace ObiOne.Action
                     /////////////////////////////////
                     command.CommandText = "UPDATE SHOP_INFO " +
                                           "SET DELETE_FLG = '1' " +
-                                          "WHERE SHOP_ID = @SHOP_ID ;";
+                                          "WHERE SHOP_ID = @SHOP_ID "+
+                                          "AND ID = @ID;";
 
 
                     command.Parameters.Add("SHOP_ID", System.Data.DbType.String).Value = shopId;
-                    int up = command.ExecuteNonQuery();
-
-                    if (up != 1) throw new Exception("削除失敗");
+                    command.Parameters.Add("ID", System.Data.DbType.String).Value = id;
+                    if( command.ExecuteNonQuery()<1) throw new Exception("削除対象がありません");
 
                     trans.Commit();
                 }

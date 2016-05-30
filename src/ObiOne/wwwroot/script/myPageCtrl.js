@@ -49,7 +49,7 @@ function ($scope, $resource, $location,$rootScope,$modal, commonService) {
     $scope.DeleteObi = function (obiId) {
         if (!confirm("この帯を削除しますか？")) return;
 
-        apiObi.delete({ obiId: obiId },
+        apiObi.delete({ obiId: obiId , AccessToken: $rootScope.loginInfo.accessToken},
             //成功時
            function () {
                alert("削除しました。");

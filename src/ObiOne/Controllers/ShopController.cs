@@ -9,6 +9,8 @@ using ObiOne.Action;
 using ObiOne.Model;
 using System.Net;
 using WebApi.OutputCache.V2;
+using ObiOne.Attribute;
+using Microsoft.AspNet.Authorization;
 
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -45,7 +47,7 @@ namespace ObiOne.Controllers
         public void Post([FromBody]PostecData pos)
         {
             //情報チェック
-            if (!pos.LoginInfo.Check()) throw new Exception("ログイン情報不正");
+            if (!LoginHandler.Auth_LoginInfoCheck(pos.LoginInfo)) throw new Exception("ログイン情報不正");
             if (!pos.ShopInfo.Check()) throw new Exception("店舗情報不正");
 
             ShopHandler s = new ShopHandler();
@@ -69,11 +71,13 @@ namespace ObiOne.Controllers
         /// </summary>
         /// <param name="pos"></param>
         [HttpDelete()]
-        public void Delete(string ShopId)
+        public void Delete(string ShopId, string accessToken)
         {
-            //todo店舗のっとりチェック
+            //所有者のIDを取得
+            string id = LoginHandler.GetIdFromToken(accessToken);
+
             ShopHandler s = new ShopHandler();
-            s.DeleteShop(ShopId);
+            s.DeleteShop(ShopId,id);
         }
 
         /// <summary>

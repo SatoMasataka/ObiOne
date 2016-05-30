@@ -31,8 +31,55 @@ myApp.directive('fileModel', function ($parse) {
     };
 });
 
+//スピナーテキストボックス
+myApp.directive('spinner', function () {
+    return {
+        restrict: 'E',
+        require: '^ngModel',
+        scope: {
+            max: '@',
+            min: '@',
+            step: '@'
+        },
+        template: '<span><input type="text" ng-model="model" size="5" style="width:50px"/>'+
+                  '<input type="button" value="▲" ng-mousedown="change(1)" ng-mouseup="stopChange()" ng-mouseleave="stopChange()"/>' +
+                  '<input type="button" value="▼" ng-mousedown="change(-1)" ng-mouseup="stopChange()" ng-mouseleave="stopChange()"/></span>',
+        replace: true,
+        link: function (scope, element, attrs, ctrl) {
+            scope.$watch('model', function (value) {
+                ctrl.$setViewValue(value);
+            });
+
+            scope.$parent.$watch(attrs.ngModel, function (value) {
+                scope.model = value;
+            });
+
+            scope.change = function (i) {
+                if (isNaN(scope.model)) {
+                    scope.model = scope.min;
+                    return;
+                };
+                $intervalID = setInterval(
+                function () {
+                    var newVal = parseFloat(scope.model) + scope.step * i;
+                    if (newVal <= scope.max && scope.min <= newVal)
+                        scope.model = newVal;
+                    ctrl.$setViewValue(scope.model);
+                },100);                
+            }
+
+            scope.stopChange = function () {
+                if ($intervalID)
+                    clearInterval($intervalID);
+            }
+
+        }
+    }
+});
+
+
 //画面共通サービス
-myApp.service('commonService', ['$location', '$rootScope', '$resource', function ($location, $rootScope, $resource) {
+myApp.service('commonService', ['$location', '$rootScope', 'cpService', function ($location, $rootScope,  cpService) {
     //認証できているかどうか
     this.checkAuth = function(){
         // 認証できていなければログインへ
@@ -49,16 +96,27 @@ myApp.service('commonService', ['$location', '$rootScope', '$resource', function
         }
     };
 
-
+    //ログオフ処理
     this.logOff = function () {
-        //var logoff=$resource(' https://api.yamareco.com/api/v1/oauth/sign_out');
-        //logoff.get(null,function(){
-            $rootScope.is_auth=false;
-            $rootScope.loginInfo=null;
-            $location.path("/top");
-       // });
-      
-    };
+        var tkn = $rootScope.loginInfo.accessToken;
+        $rootScope.is_auth = false;
+        $rootScope.loginInfo = null;
+        $location.path("/top");
+
+        //トークン破棄
+       var revokeUrl = 'https://accounts.google.com/o/oauth2/revoke?token=' + tkn;
+       $.ajax({
+           type: 'GET',
+           url: revokeUrl,
+           async: false,
+           contentType: "application/json",
+           dataType: 'jsonp'
+       });
+    }
+
+    this.commonBind = function () {
+        cpService._cPickerInit();//cpick.jsの準備
+    }
 }]);
 
 myApp.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($routeProvider, $locationProvider, $httpProvider) {
@@ -108,8 +166,7 @@ myApp.config(['$routeProvider', '$locationProvider', '$httpProvider', function (
         .defaults
         .headers
         .get['If-Modified-Since'] = (new Date(0)).toUTCString();
-}
-]);
+}]);
 
 
 
@@ -129,20 +186,23 @@ myApp.run(['$rootScope', '$resource', '$location', function ($rootScope, $resour
                 //登録済みの場合
                 $location.path("/myPage");
                 $rootScope.loginInfo = s.loginInfo;
-            }           
+            }
+
+            //アクセストークン保持
+            $rootScope.loginInfo.accessToken=authResult.hg.access_token;
         }); 
     });
 
     //認証失敗イベント
     $rootScope.$on('event:google-plus-signin-failure', function (event, authResult) {
-         alert("通信エラー：しばらくしてからもう一度アクセスしてください。");
+         alert("Googleアカウントでの認証できませんでした。");
         console.log(event, authResult);
     });
 
+    //ng-repeatをforでまわす
     $rootScope.range = function (n) {
         var arr = [];
         for (var i = 0; i < n; ++i) arr.push(i);
-
         return arr;
     };
 }]);
@@ -163,8 +223,8 @@ myApp.controller('menuCtrl', ['$scope','$location', 'commonService',function ($s
             commonService.logOff();
     }
     $scope.ToTop = function () {
-
-        commonService.logOff();
+        $location.path("/top");
+        //commonService.logOff();
     }
     $scope.IsTop = function () {
        return  $location.path() == "/top";

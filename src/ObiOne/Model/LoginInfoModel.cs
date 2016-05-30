@@ -18,6 +18,11 @@ namespace ObiOne.Model
         public string GoogleId { get; set; }
 
         /// <summary>
+        /// GoogleOAuthのトークン
+        /// </summary>
+        public string AccessToken { get; set; }
+
+        /// <summary>
         /// 入力チェック
         /// </summary>
         /// <returns></returns>

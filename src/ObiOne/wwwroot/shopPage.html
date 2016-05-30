@@ -1,22 +1,23 @@
 ﻿<div ng-init="initDisp()">
     <div ng-show="!noData">
-        <div>仮想書店</div>
-        <h3>{{ShopInfo.ShopName}}　
-            <span style="font-size:smaller"> オーナー：{{ ShopInfo.OwnerInfo.Name}}</span>
-        </h3>
-
-        {{ShopInfo.ShopComment}}
-
+        <span>仮想書店</span><br>
+        <h3 class="col-xs-6" style="">{{ShopInfo.ShopName}}</h3>
+        <h4 class="col-xs-6" style="text-align:right"> オーナー：{{ ShopInfo.OwnerInfo.Name}} さん</h4>
+        <div class="col-xs-12" style="margin:10px;">
+            {{ShopInfo.ShopComment}}
+        </div>
+        <br>
         <!--平積みエリア-->
         <div class="col-xs-12" style="background-size:cover" ng-if="bgPath" ng-style="{'background-image':'url({{bgPath}})'}">
             <span class="col-xs-3" ng-repeat="s in ShopInfo.ShopObiList" style="padding-top:20px;padding-bottom:20px">
 
                 <img ng-show="s.ObiInfo.ImgPath" ng-src="{{s.ObiInfo.ImgPath}}" style="width:100%;text-align:center;cursor:pointer;" 
                      ng-click="DispWiondowOpen(s.ObiInfo)"/>
-                <span ng-show="!s.ObiInfo.ImgPath" style="width:100%;min-height:100px;"></span>
+                <img ng-show="!s.ObiInfo.ImgPath" ng-src="img/dummy.png" style="width:100%;text-align:center;" />
+              
             </span>
         </div>
-        <div  class="col-xs-12" style="text-align:right">
+        <div  class="col-xs-12" style="text-align:right;margin-top:10px">
             この書店のURL:
             <input type="text" id="foo" ng-model="thisUrl" size="60">
             <button class="cpbtn" data-clipboard-target="#foo">
@@ -39,7 +40,8 @@
         <div>{{Detail.Author}}</div>
         <div>{{Detail.Publisher}}</div>
         <div style="width:100%;text-align:center;vertical-align:middle">
-            <img ng-src="{{Detail.ImgPath}}" style="width:90%;" />
+            <img ng-src="{{Detail.ImgPath}}" style="width:90%;"/>
+
         </div>
         <div style="height: 60px;">
             <a ng-click='ToRakutenPage(Detail.Link)'> 楽天商品ページ</a>

@@ -23,7 +23,7 @@ myApp.controller('searchBookCtrl', ['$scope', '$resource', '$location', 'editObi
                 $scope.BookInfo = wrappingSearchResult(p.Items);
             },
             //失敗時
-            function () { alert("通信エラー：しばらくしてからもう一度アクセスしてください。"); }
+            function (c) { alert("通信エラー：しばらくしてからもう一度アクセスしてください。"); }
         );
     }
 

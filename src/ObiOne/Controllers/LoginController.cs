@@ -43,26 +43,18 @@ namespace ObiOne.Controllers
         [HttpPost()]
         public GetReturnModel Post([FromBody]GetReturnModel model)
         {
+            //情報チェック
+            if (string.IsNullOrEmpty( LoginHandler.GetIdFromToken(model.loginInfo.AccessToken) ))
+                throw new Exception("ログイン情報不正");
+
             var glh = new LoginHandler();
             GetReturnModel ret = new GetReturnModel();
             ret.loginInfo = glh.NewRegist(model.loginInfo);
             return ret;
         }
 
-        // PUT api/values/5
-        [HttpPut()]
-        public void Put([FromBody]LoginInfoModel model)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
 
 
-        //以下二つは統合で
         public class GetReturnModel
         {
             /// <summary>

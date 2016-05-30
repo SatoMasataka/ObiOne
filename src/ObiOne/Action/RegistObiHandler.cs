@@ -106,8 +106,8 @@ namespace ObiOne.Action
         /// <summary>
         /// 帯の削除
         /// </summary>
-        /// <param name="model"></param>
-        public void DeleteObi(string obiId)
+        /// <param name="id">所有者のID</param>
+        public void DeleteObi(string obiId,string id)
         {
           
             //DBへの登録処理
@@ -122,11 +122,13 @@ namespace ObiOne.Action
                     //帯テーブルへの格納
                     /////////////////////////////////
                     command.CommandText = "UPDATE OBI_INFO SET DELETE_FLG = '1' " +
-                                          "WHERE OBI_ID = @OBI_ID ;";
+                                          "WHERE OBI_ID = @OBI_ID "+
+                                          "AND ID = @ID;";
 
                     command.Parameters.Add("OBI_ID", System.Data.DbType.String).Value = obiId;
+                    command.Parameters.Add("ID", System.Data.DbType.String).Value = id;
 
-                    command.ExecuteNonQuery();
+                    if (command.ExecuteNonQuery() < 1) throw new Exception("削除対象がありません");
 
                     trans.Commit();
                 }
